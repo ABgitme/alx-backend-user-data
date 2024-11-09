@@ -50,9 +50,10 @@ class RedactingFormatter(logging.Formatter):
             fields in log messages.
     """
 
-    REDACTION = "***"
-    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
-    SEPARATOR = ";"
+    REDACTION: str = "***"
+    FORMAT: str = "[HOLBERTON]\
+            %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR: str = ";"
 
     def __init__(self, fields: List[str]) -> None:
         """
@@ -62,7 +63,7 @@ class RedactingFormatter(logging.Formatter):
             fields (list): List of fields to be redacted in log messages.
         """
         super(RedactingFormatter, self).__init__(self.FORMAT)
-        self.fields = fields
+        self.fields: List[str] = fields
 
     def format(self, record: logging.LogRecord) -> str:
         """
@@ -77,8 +78,9 @@ class RedactingFormatter(logging.Formatter):
             str: The formatted and redacted log message.
         """
         """Format the record message, filtering sensitive fields"""
-        return filter_datum(self.fields, self.REDACTION,
-                            super().format(record), self.SEPARATOR)
+        original_message: str = super().format(record)
+        return filter_datum(
+            self.fields, self.REDACTION, original_message, self.SEPARATOR)
 
 
 def get_logger() -> logging.Logger:
