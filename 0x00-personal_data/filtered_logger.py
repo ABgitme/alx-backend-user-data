@@ -80,13 +80,14 @@ def get_db() -> connection.MySQLConnection:
     host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
     database = os.getenv("PERSONAL_DATA_DB_NAME")
 
-    # Establish and return a connection to the database
-    return mysql.connector.connection.MySQLConnection(
+    conobj = mysql.connector.connection.MySQLConnection(
         user=username,
         password=password,
         host=host,
         database=database
     )
+    # Establish and return a connection to the database
+    return conobj
 
 
 def main() -> None:
