@@ -38,50 +38,6 @@ def filter_datum(
     return re.sub(pattern, r'\1={}'.format(redaction), message)
 
 
-class RedactingFormatter(logging.Formatter):
-    """
-    A logging formatter class that redacts sensitive fields in log messages.
-
-    Attributes:
-        REDACTION (str): The string used to
-            replace sensitive data.
-        FORMAT (str): The logging format to be used.
-        SEPARATOR (str): The separator character between
-            fields in log messages.
-    """
-
-    REDACTION = "***"
-    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
-    SEPARATOR = ";"
-
-    def __init__(self, fields: List[str]) -> None:
-        """
-        Initializes the RedactingFormatter with specified fields to redact.
-
-        Args:
-            fields (list): List of fields to be redacted in log messages.
-        """
-        super(RedactingFormatter, self).__init__(self.FORMAT)
-        self.fields = fields
-
-    def format(self, record: logging.LogRecord) -> str:
-        """
-        Formats the log record message,
-        redacting specified sensitive fields.
-
-        Args:
-            record (logging.LogRecord): The log record
-                to be formatted.
-
-        Returns:
-            str: The formatted and redacted log message.
-        """
-        """Format the record message, filtering sensitive fields"""
-        original_message: str = super().format(record)
-        return filter_datum(
-            self.fields, self.REDACTION, original_message, self.SEPARATOR)
-
-
 def get_logger() -> logging.Logger:
     """
     Configures and returns a logger that redacts specified PII fields
@@ -158,6 +114,50 @@ def main() -> None:
 
     cursor.close()
     db.close()
+
+
+class RedactingFormatter(logging.Formatter):
+    """
+    A logging formatter class that redacts sensitive fields in log messages.
+
+    Attributes:
+        REDACTION (str): The string used to
+            replace sensitive data.
+        FORMAT (str): The logging format to be used.
+        SEPARATOR (str): The separator character between
+            fields in log messages.
+    """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self, fields: List[str]) -> None:
+        """
+        Initializes the RedactingFormatter with specified fields to redact.
+
+        Args:
+            fields (list): List of fields to be redacted in log messages.
+        """
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+        self.fields = fields
+
+    def format(self, record: logging.LogRecord) -> str:
+        """
+        Formats the log record message,
+        redacting specified sensitive fields.
+
+        Args:
+            record (logging.LogRecord): The log record
+                to be formatted.
+
+        Returns:
+            str: The formatted and redacted log message.
+        """
+        """Format the record message, filtering sensitive fields"""
+        original_message: str = super().format(record)
+        return filter_datum(
+            self.fields, self.REDACTION, original_message, self.SEPARATOR)
 
 
 if __name__ == "__main__":
