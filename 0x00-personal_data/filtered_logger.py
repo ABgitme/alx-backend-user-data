@@ -77,7 +77,7 @@ class RedactingFormatter(logging.Formatter):
             str: The formatted and redacted log message.
         """
         """Format the record message, filtering sensitive fields"""
-        original_message = super().format(record)
+        original_message: str = super().format(record)
         return filter_datum(
             self.fields, self.REDACTION, original_message, self.SEPARATOR)
 
