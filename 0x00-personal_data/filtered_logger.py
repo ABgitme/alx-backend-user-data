@@ -10,13 +10,17 @@ import logging
 import os
 import mysql.connector
 from mysql.connector import connection
-
+from typing import List
 # Define fields that should be considered as Personally
 # Identifiable Information (PII)
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def filter_datum(fields, redaction, message, separator):
+def filter_datum(
+        fields: List[str],
+        redaction: str,
+        message: str,
+        separator: str) -> str:
     """
     This function filters sensitive data from a given message
     by replacing the values of specified fields with a redaction string.
@@ -50,7 +54,7 @@ class RedactingFormatter(logging.Formatter):
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
-    def __init__(self, fields):
+    def __init__(self, fields: List[str]) -> None:
         """
         Initializes the RedactingFormatter with specified fields to redact.
 
