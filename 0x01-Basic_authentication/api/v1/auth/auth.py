@@ -35,22 +35,25 @@ class Auth:
         if path is None or excluded_paths is None:
             return True
 
-        # Handle cases where excluded_paths is empty or None
-        if not excluded_paths:
-            return True
-
-        # Remove trailing slash from the path if present (to ensure slash-tolerant matching)
-        path = path.rstrip('/')
+        # Normalize the path by removing any trailing slash
+        normalized_path = path.rstrip('/')
 
         for excluded_path in excluded_paths:
-            # Handle wildcard in the excluded path (e.g., '/api/v1/stat*')
+            # If excluded_path ends with '*', treat it as a prefix
             if excluded_path.endswith('*'):
-                # Remove the '*' and compare if the path starts with the prefix before '*'
-                if path.startswith(excluded_path[:-1]):
-                    return False
-            elif path == excluded_path:
-                return False
+                # Remove the trailing '*' and normalize the excluded path
+                normalized_excluded_path = excluded_path.rstrip('*').rstrip('/')
 
+                # If the normalized path starts with the normalized excluded path, return False
+                if normalized_path.startswith(normalized_excluded_path):
+                    return False
+            else:
+                # Normalize the excluded path and compare it to the path
+                normalized_excluded_path = excluded_path.rstrip('/')
+                if normalized_path == normalized_excluded_path:
+                    return False
+
+        # If no match is found, the path requires authentication
         return True
 
     def authorization_header(self, request=None) -> str:
