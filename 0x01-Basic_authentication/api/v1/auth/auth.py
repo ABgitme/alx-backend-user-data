@@ -32,17 +32,23 @@ class Auth:
         """
         Determines if a given path requires authentication
         """
-        if path is None:
+        if path is None or excluded_paths is None:
             return True
+
+        # Handle cases where excluded_paths is empty or None
         if not excluded_paths:
             return True
 
-        # Normalize path to ensure it has a trailing slash for comparison
-        if path and not path.endswith('/'):
-            path += '/'
+        # Remove trailing slash from the path if present (to ensure slash-tolerant matching)
+        path = path.rstrip('/')
 
         for excluded_path in excluded_paths:
-            if excluded_path == path:
+            # Handle wildcard in the excluded path (e.g., '/api/v1/stat*')
+            if excluded_path.endswith('*'):
+                # Remove the '*' and compare if the path starts with the prefix before '*'
+                if path.startswith(excluded_path[:-1]):
+                    return False
+            elif path == excluded_path:
                 return False
 
         return True
