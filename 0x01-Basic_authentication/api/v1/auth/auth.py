@@ -38,7 +38,7 @@ class Auth:
             return True
 
         # Normalize path to ensure it has a trailing slash for comparison
-        if not path.endswith('/'):
+        if path and not path.endswith('/'):
             path += '/'
 
         for excluded_path in excluded_paths:
@@ -51,7 +51,9 @@ class Auth:
         """
         Returns the authorization header from a Flask request object
         """
-        return None
+        if request is None:
+            return None
+        return request.headers.get("Authorization")
 
     def current_user(self, request=None) -> TypeVar('User'):
         """
