@@ -42,9 +42,11 @@ class Auth:
             # If excluded_path ends with '*', treat it as a prefix
             if excluded_path.endswith('*'):
                 # Remove the trailing '*' and normalize the excluded path
-                normalized_excluded_path = excluded_path.rstrip('*').rstrip('/')
+                normalized_excluded_path = excluded_path.\
+                        rstrip('*').rstrip('/')
 
-                # If the normalized path starts with the normalized excluded path, return False
+                # If the normalized path starts with
+                # the normalized excluded path, return False
                 if normalized_path.startswith(normalized_excluded_path):
                     return False
             else:
