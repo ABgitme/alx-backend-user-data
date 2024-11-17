@@ -15,6 +15,7 @@ mechanisms.
 """
 from typing import List, TypeVar
 from flask import request
+import os
 
 
 class Auth:
@@ -71,3 +72,23 @@ class Auth:
         Retrieves the current user based on the request
         """
         return None
+
+    def session_cookie(self, request=None):
+        """
+        Retrieves the session cookie from the request.
+
+        Args:
+            request (flask.Request): The request object containing cookies.
+
+        Returns:
+            str or None: The value of the session cookie, or None if not found.
+        """
+        # Return None if the request is not provided
+        if request is None:
+            return None
+
+        # Retrieve the session cookie name from environment variable
+        session_name = os.getenv("SESSION_NAME", "_my_session_id")
+
+        # Use .get() to retrieve the cookie value safely
+        return request.cookies.get(session_name)
