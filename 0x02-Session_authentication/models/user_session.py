@@ -1,5 +1,7 @@
-# models/user_session.py
-
+#!/usr/bin/env python3
+"""UserSession model will store user sessions
+in the file-based database,
+inheriting from Base for the persistence functionality"""
 from models.base import Base
 
 
