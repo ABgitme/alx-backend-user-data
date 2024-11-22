@@ -68,14 +68,9 @@ class DB:
             InvalidRequestError: If the query arguments are invalid.
         """
         if not kwargs:
-            raise InvalidRequestError
+            raise InvalidRequestError()
 
-        try:
-            user = self._session.query(User).filter_by(**kwargs).first()
-            if user is None:
-                raise NoResultFound('function did not find a\
-                    User that does not exist')
+        user = self._session.query(User).filter_by(**kwargs).first()
+        if user:
             return user
-        except InvalidRequestError as e:
-            raise InvalidRequestError('function raises error\
-                when invalid argument is passed')
+        raise NoResultFound()
