@@ -73,7 +73,9 @@ class DB:
         try:
             user = self._session.query(User).filter_by(**kwargs).first()
             if user is None:
-                raise NoResultFound
+                raise NoResultFound('function did not find a\
+                    User that does not exist')
             return user
         except InvalidRequestError as e:
-            raise InvalidRequestError
+            raise InvalidRequestError('function raises error\
+                when invalid argument is passed')
